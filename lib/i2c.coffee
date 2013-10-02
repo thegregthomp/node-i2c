@@ -46,6 +46,10 @@ class i2c extends EventEmitter
     @setAddress @address
     wire.writeByte byte, callback
 
+  writeByteData: (cmd, buf, callback) ->
+    @setAddress @address
+    wire.WriteByteData cmd, buf, callback
+
   writeBytes: (cmd, buf, callback) ->
     @setAddress @address
     unless Buffer.isBuffer(buf) then buf = new Buffer(buf)
@@ -54,6 +58,10 @@ class i2c extends EventEmitter
   readByte: (callback) ->
     @setAddress @address
     wire.readByte callback
+
+  readByteData: (buf, callback) ->
+    @setAddress @address
+    wire.ReadByteData buf, callback
 
   readBytes: (cmd, len, callback) ->
     @setAddress @address

@@ -61,7 +61,6 @@ Handle<Value> Scan(const Arguments& args) {
 
   return scope.Close(results);
 }
-
 Handle<Value> Close(const Arguments& args) {
   HandleScope scope;
 
@@ -117,7 +116,30 @@ Handle<Value> ReadByte(const Arguments& args) {
   }
   return scope.Close(data);
 }
+/*=====================================================================================================*/
 
+/*=====================================================================================================*/
+Handle<Value> ReadByteData(const Arguments& args) {
+  HandleScope scope;
+
+  int registerbyte     = args[0]->Int32Value();
+  Local<Function> callback = Local<Function>::Cast(args[1]);
+  Local<Value> err = Local<Value>::New(Null());
+
+  uint8_t res = i2c_smbus_read_byte_data(fd, registerbyte);
+  if (res == -1) {
+    err = Exception::Error(String::New("Cannot read device"));
+  }
+  const unsigned argc = 2;
+  Local<Value> argv[argc] = { err, Integer::New(res) };
+
+  callback->Call(Context::GetCurrent()->Global(), argc, argv);
+
+  return scope.Close(Integer::New(res));
+}
+/*=====================================================================================================*/
+
+/*=====================================================================================================*/
 Handle<Value> ReadBlock(const Arguments& args) {
   HandleScope scope;
 
@@ -177,7 +199,34 @@ Handle<Value> WriteByte(const Arguments& args) {
 
   return scope.Close(Undefined());
 }
+/*=====================================================================================================*/
 
+/*=====================================================================================================*/
+Handle<Value> WriteByteData(const Arguments& args) {
+  HandleScope scope;
+
+  int8_t cmd = args[0]->Int32Value();
+  int8_t byte = args[1]->Int32Value();
+  int8_t res;
+
+  Local<Value> err = Local<Value>::New(Null());
+
+  res = i2c_smbus_write_byte_data(fd, cmd, byte);
+
+  if (args[2]->IsFunction()) {
+    const unsigned argc = 1;
+    Local<Function> callback = Local<Function>::Cast(args[3]);
+    Local<Value> argv[argc] = { err };
+
+    callback->Call(Context::GetCurrent()->Global(), argc, argv);
+  }
+
+  return scope.Close(Undefined());
+
+}
+/*=====================================================================================================*/
+
+/*=====================================================================================================*/
 Handle<Value> WriteBlock(const Arguments& args) {
   HandleScope scope;
 
@@ -243,11 +292,17 @@ void Init(Handle<Object> target) {
   target->Set(String::NewSymbol("writeByte"),
       FunctionTemplate::New(WriteByte)->GetFunction());
 
+  target->Set(String::NewSymbol("writeByteData"),
+      FunctionTemplate::New(WriteByteData)->GetFunction());
+
   target->Set(String::NewSymbol("writeBlock"),
       FunctionTemplate::New(WriteBlock)->GetFunction());
 
   target->Set(String::NewSymbol("readByte"),
     FunctionTemplate::New(ReadByte)->GetFunction());
+
+  target->Set(String::NewSymbol("readByteData"),
+    FunctionTemplate::New(ReadByteData)->GetFunction());
 
   target->Set(String::NewSymbol("readBlock"),
     FunctionTemplate::New(ReadBlock)->GetFunction());
