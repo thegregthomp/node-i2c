@@ -48,7 +48,7 @@ class i2c extends EventEmitter
 
   writeByteData: (cmd, buf, callback) ->
     @setAddress @address
-    wire.WriteByteData cmd, buf, callback
+    wire.writeByteData cmd, buf, callback
 
   writeBytes: (cmd, buf, callback) ->
     @setAddress @address
@@ -61,7 +61,7 @@ class i2c extends EventEmitter
 
   readByteData: (buf, callback) ->
     @setAddress @address
-    wire.ReadByteData buf, callback
+    wire.readByteData buf, callback
 
   readBytes: (cmd, len, callback) ->
     @setAddress @address

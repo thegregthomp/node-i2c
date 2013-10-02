@@ -1,4 +1,4 @@
-# i2c
+# i2cG - a node-i2c fork (added writeByteData and readByteData) native functions
 
 Bindings for i2c-dev. Plays well with Raspberry Pi and Beaglebone.
 

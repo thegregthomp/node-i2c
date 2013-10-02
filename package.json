@@ -1,12 +1,12 @@
 {
-  "name": "i2c",
+  "name": "i2cG",
   "version": "0.1.4",
-  "description": "Native bindings for i2c-dev. Plays well with Raspberry Pi and BeagleBone.",
+  "description": "Fork of korevec/node-i2c.git, with added features",
   "main": "main.js",
   "author": "Kelly Korevec",
   "repository": {
     "type": "git",
-    "url": "http://github.com/korevec/node-i2c.git"
+    "url": "https://github.com/thegregthomp/node-i2c.git"
   },
   "license": "BSD",
   "dependencies": {
